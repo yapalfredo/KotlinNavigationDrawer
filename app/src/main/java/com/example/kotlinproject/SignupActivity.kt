@@ -6,19 +6,23 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import com.example.kotlinproject.util.DATA_USERS
+import com.example.kotlinproject.util.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_signup.*
 
 class SignupActivity : AppCompatActivity() {
 
     //1
+    private val firebaseDatabase = FirebaseDatabase.getInstance().reference
     private val firebaseAuth = FirebaseAuth.getInstance()
 
     //2
     private val firebaseAuthListener = FirebaseAuth.AuthStateListener {
-        val user = firebaseAuth.currentUser
+        val userId = firebaseAuth.currentUser
         Toast.makeText(this,"Registration Successful!",Toast.LENGTH_SHORT).show()
-        if (user != null) {
+        if (userId != null) {
             finish()
         }
     }
@@ -55,6 +59,13 @@ class SignupActivity : AppCompatActivity() {
                                 "Signup error ${task.exception?.localizedMessage}",
                                 Toast.LENGTH_SHORT
                             ).show()
+                        }else{
+                            val email = username_edittext.text.toString()
+                            //either take the value from the firebase or if it's null then take ""
+                            val userId = firebaseAuth.currentUser?.uid ?: ""
+                            val user = User(userId, email, "", "", "")
+                            //programmatically creates the database
+                            firebaseDatabase.child(DATA_USERS).child(userId).setValue(user)
                         }
                     }
             } else {
