@@ -21,8 +21,8 @@ class SignupActivity : AppCompatActivity() {
     //2
     private val firebaseAuthListener = FirebaseAuth.AuthStateListener {
         val userId = firebaseAuth.currentUser
-        Toast.makeText(this,"Registration Successful!",Toast.LENGTH_SHORT).show()
         if (userId != null) {
+            Toast.makeText(this,"Registration Successful!",Toast.LENGTH_SHORT).show()
             finish()
         }
     }
@@ -47,7 +47,7 @@ class SignupActivity : AppCompatActivity() {
     fun onSignup(v: View) {
 
         if (!username_edittext.text.toString().isNullOrEmpty() && !password_edittext.text.toString().isNullOrEmpty() && !confirmpassword_edittext.text.toString().isNullOrEmpty()) {
-            if (password_edittext.text.toString().equals(confirmpassword_edittext.text.toString())) {
+            if (password_edittext.text.toString() == confirmpassword_edittext.text.toString()) {
                 firebaseAuth.createUserWithEmailAndPassword(
                     username_edittext.text.toString(),
                     password_edittext.text.toString()
